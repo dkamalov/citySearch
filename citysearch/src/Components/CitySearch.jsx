@@ -9,10 +9,9 @@ export default class CitySearch extends Component {
         this.onChangeHandler = this.onChangeHandler.bind(this)
     }
 
-    getZips() {
+    componentDidMount() {
         const z = 'https://ctp-zip-api.herokuapp.com/city/' + this.state.city
         axios.get(z).then((output) => {
-            console.log(output)
             this.setState({ zipcodes: output.data })
         })
         .catch((err) => {
@@ -27,7 +26,7 @@ export default class CitySearch extends Component {
 
     async componentDidUpdate(priorState) {
         if (this.state.city !== priorState) {
-            this.getZips()
+            this.componentDidMount()
         }
     }
 

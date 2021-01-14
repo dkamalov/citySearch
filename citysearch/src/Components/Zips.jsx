@@ -4,7 +4,7 @@ class Zips extends Component {
     render() {
         return (
             <div>
-                <p>{this.props.val}</p>
+                <p className = "Zipcode">{this.props.val}</p>
             </div>
         )
     }
