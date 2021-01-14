@@ -1,64 +1,43 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Citiesinfo from './citiesinfo'
+import Zips from './Zips'
 
-class Zipdisplay extends Component {
-    constructor (props) {
+export default class CitySearch extends Component {
+    constructor(props) {
         super(props)
-
-        this.state = {
-            locationInfo : [],
-            zipCode: '',
-            zipFound: false
-        }
+        this.state = { zipcodes: [], city: '' }
+        this.onChangeHandler = this.onChangeHandler.bind(this)
     }
 
-    async componentDidMount() {
-        try {
-            const locationInfo = await axios.get('http://ctp-zip-api.herokuapp.com/zip/10016')
-            this.setState({locationInfo: locationInfo.data})
-            console.log(this.state.locationInfo)
-        }
-        catch (error){
-            console.error(error)
-        }
-    }
-
-    handleInputChange = (e) => {
-        this.setState({
-            zipCode: e.target.value
+    getZips() {
+        const z = 'https://ctp-zip-api.herokuapp.com/city/' + this.state.city
+        axios.get(z).then((output) => {
+            console.log(output)
+            this.setState({ zipcodes: output.data })
+        })
+        .catch((err) => {
+            console.log(err)
         })
     }
 
+    onChangeHandler(event) {
+        let city = event.target.value 
+        this.setState({ city: city.toUpperCase() })
+    }
 
-    render() {
+    async componentDidUpdate(priorState) {
+        if (this.state.city !== priorState) {
+            this.getZips()
+        }
+    }
+
+    render() { 
         return (
             <div>
-                <input type='text' value={this.state.zipCode} onChange={this.handleInputChange}/>
-                {this.state.locationInfo.map((loc,index) => {
-                    if (loc.Zipcode === this.state.zipCode) {
-                        console.log("IM IN!!!")
-                     return (
-                         <div>
-                            <Citiesinfo
-                                go = {this.state.zipFound}
-                                city = {loc.City} 
-                                key = {index}
-                                state = {loc.State}
-                                pop = {loc.EstimatedPopulation}
-                                long = {loc.Long}
-                                lat = {loc.Lat}
-                                wage = {loc.TotalWages}
-                            />
-                        </div>
-                        );
-                    } else return console.log(loc.Zipcode + " " + this.state.zipCode)
-            })}
-            {console.log(this.state.zipCode)}
-            {console.log("running...")}
+                <span>Enter City</span>
+                <input type='text' name='city' onChange={(event) => this.onChangeHandler(event)}/>
+                {this.state.zipcodes.map((val, index) => { return <Zips val={val} key={index}/> })} 
             </div>
         )
     }
 }
-
-export default Zipdisplay
