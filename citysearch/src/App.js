@@ -1,11 +1,11 @@
 import './App.css';
-import Zipdisplay from './Components/zipdisplay'
+import CitySearch from './components/CitySearch'
 import React from 'react'
 
 function App() {
   return (
-    <div className="App">
-      <Zipdisplay />
+    <div>
+      <CitySearch/>
     </div>
   );
 }
