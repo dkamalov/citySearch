@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Zips from './Zips'
+import './App.css';
+
+
 
 export default class CitySearch extends Component {
     constructor(props) {
@@ -32,9 +35,11 @@ export default class CitySearch extends Component {
 
     render() { 
         return (
-            <div>
-                <span>Enter City</span>
+            <div className="container">
+                <h1>Enter City</h1>
                 <input type='text' name='city' onChange={(event) => this.onChangeHandler(event)}/>
+                <hr></hr>
+
                 {this.state.zipcodes.map((val, index) => { return <Zips val={val} key={index}/> })} 
             </div>
         )
